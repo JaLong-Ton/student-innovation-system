@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime?      @updatedAt
+  achievements  Achievement[]
+  registrations Registration[]
+}
+
+model Achievement {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  type      String
+  level     String
+  date      DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Competition {
+  id                  String         @id @default(cuid())
+  name                String
+  description         String?
+  deadline            DateTime
+  category            String
+  currentParticipants Int            @default(0)
+  maxParticipants     Int
+  registrations       Registration[]
+}
+
+model Teacher {
+  id          String   @id @default(cuid())
+  teacherNo   String   @unique
+  name        String
+  department  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  registrations Registration[]
+}
+
+model Registration {
+  id            String      @id @default(cuid())
+  userId        String
+  competitionId String
+  status        String      @default("PENDING")
+  applicantName String?
+  projectName   String?
+  teamMembers   String?
+  teacherId     String?
+  notes         String?
+  feedback      String?     // 审批反馈或驳回原因
+  createdAt     DateTime    @default(now())
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
+  teacher       Teacher?    @relation(fields: [teacherId], references: [id])
+}
