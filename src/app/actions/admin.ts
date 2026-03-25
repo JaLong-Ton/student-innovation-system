@@ -1,27 +1,31 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { auth, clerkClient } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 
 /**
- * 验证管理员权限的辅助函数
+ * 验证管理员权限的辅助函数（基于本地 JWT Token，零网络请求）
  */
-async function verifyAdminPermission() {
-  const { userId } = await auth()
-  
-  if (!userId) {
-    throw new Error('用户未登录')
-  }
+export async function verifyAdminPermission() {
+  try {
+    const { userId, sessionClaims } = await auth()
 
-  const clerk = await clerkClient()
-  const user = await clerk.users.getUser(userId)
-  
-  if (user.publicMetadata.role !== 'admin') {
-    throw new Error('权限不足：需要管理员权限')
+    if (!userId) {
+      throw new Error('未登录，请先登录')
+    }
+    
+    // 直接从本地 JWT Token 中读取 role，零网络请求！
+    const role = (sessionClaims as any)?.role
+    if (role !== 'admin') {
+      throw new Error('权限不足：您的账号不是管理员')
+    }
+    
+    return { userId } // 不再返回完整的 user 对象，因为我们不需要了
+  } catch (error) {
+    console.error('管理员权限校验失败:', error)
+    throw new Error(error instanceof Error ? error.message : '权限校验遇到未知错误')
   }
-
-  return { userId, clerk }
 }
 
 /**
@@ -31,23 +35,61 @@ export async function getAllUsers() {
   try {
     await verifyAdminPermission()
     
-    const clerk = await clerkClient()
-    const userList = await clerk.users.getUserList({
-      limit: 100,
-      orderBy: '-created_at'
+    // 从数据库获取用户信息，不再依赖 Clerk API
+    const users = await prisma.user.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      }
     })
 
-    // 返回精简的用户信息
-    return userList.data.map(user => ({
+    // 返回用户信息
+    return users.map(user => ({
       id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      emailAddresses: user.emailAddresses,
-      imageUrl: user.imageUrl
+      firstName: user.name?.split(' ')[0] || null,
+      lastName: user.name?.split(' ').slice(1).join(' ') || null,
+      emailAddresses: [{ emailAddress: user.email }],
+      imageUrl: null // 数据库中没有存储头像信息
     }))
   } catch (error) {
     console.error('获取用户列表失败:', error)
-    throw error instanceof Error ? error : new Error('获取用户列表失败')
+    
+    // 检查是否是权限验证错误
+    if (error instanceof Error && (
+      error.message.includes('网络请求超时') ||
+      error.message.includes('认证服务') ||
+      error.message.includes('权限不足') ||
+      error.message.includes('未登录')
+    )) {
+      console.error('权限验证失败，返回空数组:', error.message)
+      return []
+    }
+    
+    // 检查是否是网络错误或其他 API 错误
+    if (error instanceof Error) {
+      if (error.message.includes('fetch') || 
+          error.message.includes('network') ||
+          error.message.includes('ECONNREFUSED') ||
+          error.message.includes('timeout')) {
+        console.error('网络连接错误，可能是 Clerk 服务不可用:', error.message)
+        return []
+      }
+      
+      if (error.message.includes('ClerkAPIResponseError')) {
+        console.error('Clerk API 响应错误:', error.message)
+        return []
+      }
+    }
+    
+    // 检查是否是 Clerk API 特定错误
+    if (error && typeof error === 'object' && 'clerkError' in error) {
+      console.error('Clerk API 错误详情:', JSON.stringify(error, null, 2))
+      // 返回空数组而不是抛出错误，防止页面崩溃
+      return []
+    }
+    
+    // 其他未知错误，返回空数组防止页面崩溃
+    console.error('未知错误类型，返回空数组:', error)
+    return []
   }
 }
 
@@ -466,7 +508,13 @@ export async function getAllRegistrations() {
   
   try {
     const registrations = await prisma.registration.findMany({
-      include: {
+      select: {
+        id: true,
+        status: true,
+        applicantName: true,
+        projectName: true,
+        teamMembers: true,
+        createdAt: true,
         competition: {
           select: {
             id: true,
@@ -523,7 +571,11 @@ export async function reviewRegistration(registrationId: string, status: string,
 
     // 检查报名记录是否存在
     const existingRegistration = await prisma.registration.findUnique({
-      where: { id: registrationId }
+      where: { id: registrationId },
+      include: {
+        competition: true,
+        user: true
+      }
     })
 
     if (!existingRegistration) {
@@ -539,21 +591,63 @@ export async function reviewRegistration(registrationId: string, status: string,
       }
     })
 
+    // 如果审批通过，自动生成成就记录
+    if (status === 'APPROVED') {
+      try {
+        // 检查是否已存在相同的成就记录（避免重复生成）
+        const existingAchievement = await prisma.achievement.findFirst({
+          where: {
+            userId: existingRegistration.userId,
+            title: existingRegistration.competition.name,
+            type: 'AWARD' // 竞赛获奖默认为奖项类型
+          }
+        })
+
+        if (!existingAchievement) {
+          // 根据竞赛类别确定成就级别
+          let achievementLevel: 'STATE' | 'PROVINCE' | 'SCHOOL' = 'SCHOOL'
+          if (existingRegistration.competition.category === 'TECHNICAL' || 
+              existingRegistration.competition.category === 'AI') {
+            achievementLevel = 'STATE'
+          } else if (existingRegistration.competition.category === 'PROGRAMMING' || 
+                     existingRegistration.competition.category === 'INNOVATION') {
+            achievementLevel = 'PROVINCE'
+          }
+
+          // 创建成就记录
+          await prisma.achievement.create({
+            data: {
+              userId: existingRegistration.userId,
+              title: existingRegistration.competition.name,
+              type: 'AWARD',
+              level: achievementLevel,
+              date: new Date(), // 使用审批通过的时间作为获得时间
+            }
+          })
+
+          console.log(`已为用户 ${existingRegistration.userId} 自动生成成就记录：${existingRegistration.competition.name}`)
+        }
+      } catch (achievementError) {
+        console.error('自动生成成就记录失败:', achievementError)
+        // 不影响审批流程，只记录错误
+      }
+    }
+
     // 重新验证缓存
     revalidatePath('/admin/registrations')
     revalidatePath('/profile')
+    revalidatePath('/admin/achievements') // 刷新管理员成就页面（如果存在）
 
     return {
       success: true,
-      message: status === 'APPROVED' ? '报名已通过审批' : '报名已驳回'
+      message: status === 'APPROVED' ? '报名已通过，已自动生成成就记录！' : '报名已更新'
     }
 
   } catch (error) {
-    console.error('审批报名失败:', error)
-    
+    console.error('审核报名失败:', error)
     return {
       success: false,
-      message: error instanceof Error ? error.message : '审批失败，请稍后重试'
+      message: error instanceof Error ? error.message : '审核失败，请稍后重试'
     }
   }
 }
@@ -562,12 +656,20 @@ export async function reviewRegistration(registrationId: string, status: string,
  * 获取管理员控制台统计数据
  */
 export async function getDashboardStats() {
-  const { clerk } = await verifyAdminPermission()
-  
   try {
-    // 并行获取各项统计数据
+    await verifyAdminPermission()
+    
+    // 从数据库获取用户总数，不再依赖 Clerk API
+    let totalUsers = 0
+    try {
+      totalUsers = await prisma.user.count()
+    } catch (dbError) {
+      console.error('获取用户总数失败:', dbError)
+      totalUsers = 0 // 使用默认值
+    }
+    
+    // 并行获取其他统计数据
     const [
-      totalUsers,
       totalCompetitions,
       totalRegistrations,
       pendingReviews,
@@ -575,9 +677,6 @@ export async function getDashboardStats() {
       topCompetitions,
       recentPending
     ] = await Promise.all([
-      // 用户总数
-      clerk.users.getCount(),
-      
       // 赛事总数
       prisma.competition.count(),
       
@@ -642,9 +741,9 @@ export async function getDashboardStats() {
     ])
 
     // 处理分类统计数据，合并相似分类
-    const processedCategoryStats = categoryStats.reduce((acc, item) => {
+    const processedCategoryStats = categoryStats.reduce((acc: { name: string; value: number }[], item: any) => {
       const category = item.category || '其他'
-      const existingItem = acc.find(stat => stat.name === category)
+      const existingItem = acc.find((stat: { name: string; value: number }) => stat.name === category)
       
       if (existingItem) {
         existingItem.value += item._count.id
@@ -664,11 +763,11 @@ export async function getDashboardStats() {
       totalRegistrations,
       pendingReviews,
       categoryStats: processedCategoryStats,
-      topCompetitions: topCompetitions.map(comp => ({
+      topCompetitions: topCompetitions.map((comp: any) => ({
         name: comp.name,
         registrations: comp._count.registrations
       })),
-      recentPending: recentPending.map(reg => ({
+      recentPending: recentPending.map((reg: any) => ({
         id: reg.id,
         applicantName: reg.applicantName || reg.user?.name || '未知',
         competitionName: reg.competition.name,
@@ -677,7 +776,37 @@ export async function getDashboardStats() {
     }
   } catch (error) {
     console.error('获取仪表板统计数据失败:', error)
-    throw error instanceof Error ? error : new Error('获取统计数据失败，请稍后重试')
+    
+    // 如果是权限验证错误，返回默认统计数据
+    if (error instanceof Error && (
+      error.message.includes('网络请求超时') ||
+      error.message.includes('认证服务') ||
+      error.message.includes('权限不足') ||
+      error.message.includes('未登录')
+    )) {
+      console.error('权限验证失败，返回默认统计数据:', error.message)
+      return {
+        totalUsers: 0,
+        totalCompetitions: 0,
+        totalRegistrations: 0,
+        pendingReviews: 0,
+        categoryStats: [],
+        topCompetitions: [],
+        recentPending: []
+      }
+    }
+    
+    // 其他错误也返回默认统计数据，防止页面崩溃
+    console.error('未知错误，返回默认统计数据:', error)
+    return {
+      totalUsers: 0,
+      totalCompetitions: 0,
+      totalRegistrations: 0,
+      pendingReviews: 0,
+      categoryStats: [],
+      topCompetitions: [],
+      recentPending: []
+    }
   }
 }
 
@@ -685,7 +814,7 @@ export async function getDashboardStats() {
  * 批量导入指导老师
  */
 export async function batchImportTeachers(teachersData: { name: string; department?: string }[]) {
-  const { clerk } = await verifyAdminPermission()
+  await verifyAdminPermission()
   
   try {
     // 获取当前年份
@@ -741,5 +870,248 @@ export async function batchImportTeachers(teachersData: { name: string; departme
   } catch (error) {
     console.error('批量导入指导老师失败:', error)
     throw error instanceof Error ? error : new Error('批量导入失败，请稍后重试')
+  }
+}
+
+/**
+ * 批量审批报名记录
+ */
+export async function batchReviewRegistrations(
+  ids: string[], 
+  status: 'APPROVED' | 'REJECTED_RETRY' | 'REJECTED_FINAL', 
+  feedback?: string
+) {
+  await verifyAdminPermission()
+  
+  try {
+    // 验证状态值
+    const validStatuses = ['APPROVED', 'REJECTED_RETRY', 'REJECTED_FINAL']
+    if (!validStatuses.includes(status)) {
+      throw new Error('无效的审批状态')
+    }
+
+    // 如果状态为 REJECTED_RETRY 或 REJECTED_FINAL，必须提供反馈意见
+    if ((status === 'REJECTED_RETRY' || status === 'REJECTED_FINAL') && (!feedback || feedback.trim().length === 0)) {
+      throw new Error('驳回申请时必须提供反馈意见')
+    }
+
+    // 验证ID数组
+    if (!ids || ids.length === 0) {
+      throw new Error('请选择要审批的报名记录')
+    }
+
+    // 获取要更新的报名记录详情（用于生成成就）
+    const registrationsToUpdate = await prisma.registration.findMany({
+      where: { 
+        id: { in: ids }
+      },
+      include: {
+        competition: true,
+        user: true
+      }
+    })
+
+    // 批量更新报名记录
+    const result = await prisma.registration.updateMany({
+      where: { 
+        id: { in: ids }
+      },
+      data: { 
+        status, 
+        feedback: feedback?.trim() || null 
+      }
+    })
+
+    // 如果审批通过，批量生成成就记录
+    if (status === 'APPROVED') {
+      try {
+        for (const registration of registrationsToUpdate) {
+          // 检查是否已存在相同的成就记录（避免重复生成）
+          const existingAchievement = await prisma.achievement.findFirst({
+            where: {
+              userId: registration.userId,
+              title: registration.competition.name,
+              type: 'AWARD' // 竞赛获奖默认为奖项类型
+            }
+          })
+
+          if (!existingAchievement) {
+            // 根据竞赛类别确定成就级别
+            let achievementLevel: 'STATE' | 'PROVINCE' | 'SCHOOL' = 'SCHOOL'
+            if (registration.competition.category === 'TECHNICAL' || 
+                registration.competition.category === 'AI') {
+              achievementLevel = 'STATE'
+            } else if (registration.competition.category === 'PROGRAMMING' || 
+                       registration.competition.category === 'INNOVATION') {
+              achievementLevel = 'PROVINCE'
+            }
+
+            // 创建成就记录
+            await prisma.achievement.create({
+              data: {
+                userId: registration.userId,
+                title: registration.competition.name,
+                type: 'AWARD',
+                level: achievementLevel,
+                date: new Date(), // 使用审批通过的时间作为获得时间
+              }
+            })
+
+            console.log(`已为用户 ${registration.userId} 自动生成成就记录：${registration.competition.name}`)
+          }
+        }
+      } catch (achievementError) {
+        console.error('批量生成成就记录失败:', achievementError)
+        // 不影响审批流程，只记录错误
+      }
+    }
+
+    // 重新验证缓存
+    revalidatePath('/admin/registrations')
+    revalidatePath('/profile')
+    revalidatePath('/admin/achievements') // 刷新管理员成就页面（如果存在）
+
+    return {
+      success: true,
+      count: result.count,
+      message: status === 'APPROVED' 
+        ? `成功通过 ${result.count} 条报名申请，已自动生成成就记录！` 
+        : `成功处理 ${result.count} 条报名记录`
+    }
+  } catch (error) {
+    console.error('批量审批失败:', error)
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : '批量审批失败，请稍后重试'
+    }
+  }
+}
+
+/**
+ * 获取所有用户的成就记录（管理员专用）
+ */
+export async function getAllAchievements() {
+  try {
+    await verifyAdminPermission()
+    
+    const achievements = await prisma.achievement.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    return achievements
+  } catch (error) {
+    console.error('获取成就记录失败:', error)
+    
+    // 如果是权限验证错误，返回空数组而不是抛出错误
+    if (error instanceof Error && (
+      error.message.includes('网络请求超时') ||
+      error.message.includes('认证服务') ||
+      error.message.includes('权限不足') ||
+      error.message.includes('未登录')
+    )) {
+      console.error('权限验证失败，返回空数组:', error.message)
+      return []
+    }
+    
+    // 其他错误也返回空数组，防止页面崩溃
+    console.error('未知错误，返回空数组:', error)
+    return []
+  }
+}
+
+/**
+ * 获取导出数据
+ */
+export async function getExportData(competitionId: string) {
+  await verifyAdminPermission()
+  
+  try {
+    // 查询该赛事下所有已通过的报名记录
+    const registrations = await prisma.registration.findMany({
+      where: {
+        competitionId,
+        status: 'APPROVED'
+      },
+      // 核心优化：只查询这 6 个前端真正需要的字段，丢弃 id、userId、状态等冗余数据
+      select: {
+        applicantName: true,
+        projectName: true,
+        teamMembers: true,
+        notes: true,
+        createdAt: true,
+        teacher: {
+          select: {
+            name: true,
+            department: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'asc'
+      }
+    })
+
+    // 扁平化格式化数据
+    const exportData = registrations.map(reg => ({
+      申请人: reg.applicantName || '未知',
+      作品名称: reg.projectName || '无',
+      团队成员: reg.teamMembers || '无',
+      指导老师: reg.teacher?.name || '无',
+      老师学院: reg.teacher?.department || '无',
+      报名说明: reg.notes || '无',
+      提交时间: reg.createdAt.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      })
+    }))
+
+    return exportData
+  } catch (error) {
+    console.error('获取导出数据失败:', error)
+    throw error instanceof Error ? error : new Error('获取导出数据失败，请稍后重试')
+  }
+}
+
+/**
+ * 切换竞赛归档状态
+ */
+export async function toggleCompetitionArchive(id: string, currentStatus: boolean) {
+  await verifyAdminPermission()
+  
+  try {
+    // 更新竞赛状态
+    const newStatus = !currentStatus
+    const competition = await prisma.competition.update({
+      where: { id },
+      data: { isActive: newStatus }
+    })
+
+    // 重新验证缓存
+    revalidatePath('/admin/competitions')
+    revalidatePath('/competitions')
+
+    return {
+      success: true,
+      data: competition,
+      message: newStatus ? '竞赛已重新上架' : '竞赛已归档'
+    }
+  } catch (error) {
+    console.error('切换竞赛状态失败:', error)
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : '切换竞赛状态失败，请稍后重试'
+    }
   }
 }

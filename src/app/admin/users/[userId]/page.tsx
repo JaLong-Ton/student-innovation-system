@@ -1,9 +1,9 @@
-import { clerkClient } from '@clerk/nextjs/server'
 import { getAchievementsByUserId } from '@/app/actions/admin'
 import { DeleteAchievementButton } from '@/components/admin/delete-achievement-button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { prisma } from '@/lib/prisma'
 import { Trophy, FileText, Lightbulb, Calendar, User } from 'lucide-react'
 
 interface UserAchievementsPageProps {
@@ -19,12 +19,21 @@ export default async function UserAchievementsPage({
   const resolvedParams = await params;
   const userId = resolvedParams.userId;
 
-  // 2. 然后再传给 Clerk
-  const clerk = await clerkClient()
-  const user = await clerk.users.getUser(userId)
-  
-  // 获取用户成就
-  const achievements = await getAchievementsByUserId(userId)
+  // 2. 并发获取用户信息和成就数据
+  const [user, achievements] = await Promise.all([
+    // 从数据库获取用户信息，不再依赖 Clerk API
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true
+      }
+    }).catch(() => null), // 加上 catch 防止单点崩溃
+    
+    // 获取成就数据
+    getAchievementsByUserId(userId)
+  ])
 
   const getAchievementIcon = (type: string) => {
     switch (type) {
@@ -73,8 +82,12 @@ export default async function UserAchievementsPage({
     }).format(date)
   }
 
+  // 处理用户姓名分割
+  const firstName = user?.name?.split(' ')[0] || null
+  const lastName = user?.name?.split(' ').slice(1).join(' ') || null
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       {/* 学生基本信息 */}
       <Card>
         <CardHeader>
@@ -86,20 +99,17 @@ export default async function UserAchievementsPage({
         <CardContent>
           <div className="flex items-center gap-4">
             <Avatar className="h-16 w-16">
-              <AvatarImage src={user.imageUrl} alt={user.firstName || '用户'} />
+              <AvatarImage src={undefined} alt={firstName || '用户'} />
               <AvatarFallback className="text-lg">
-                {(user.firstName?.[0] || 'U') + (user.lastName?.[0] || '')}
+                {(firstName?.[0] || 'U') + (lastName?.[0] || '')}
               </AvatarFallback>
             </Avatar>
             <div>
               <h2 className="text-xl font-semibold text-gray-900">
-                {user.firstName && user.lastName 
-                  ? `${user.firstName} ${user.lastName}` 
-                  : '未设置姓名'
-                }
+                {user?.name || '未设置姓名'}
               </h2>
               <p className="text-gray-600">
-                {user.emailAddresses[0]?.emailAddress || '无邮箱'}
+                {user?.email || '无邮箱'}
               </p>
               <p className="text-sm text-gray-500 mt-1">
                 用户ID: {userId}

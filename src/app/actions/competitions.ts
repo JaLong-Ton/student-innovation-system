@@ -36,7 +36,8 @@ export async function getCompetitions(category?: string) {
             description: '面向全国高校学生的自动化控制设计竞赛，鼓励创新思维和工程实践能力。',
             deadline: new Date('2026-06-30'),
             maxParticipants: 500,
-            currentParticipants: 0
+            currentParticipants: 0,
+            isActive: true
           },
           {
             name: 'C++算法与数据结构挑战赛',
@@ -44,7 +45,8 @@ export async function getCompetitions(category?: string) {
             description: '考验参赛者的C++编程能力和算法思维，包含多种数据结构题目。',
             deadline: new Date('2026-05-15'),
             maxParticipants: 1000,
-            currentParticipants: 0
+            currentParticipants: 0,
+            isActive: true
           },
           {
             name: 'AI与地质灾害预测创新应用赛',
@@ -52,7 +54,8 @@ export async function getCompetitions(category?: string) {
             description: '运用人工智能技术解决地质灾害预测问题，推动AI在防灾减灾中的应用。',
             deadline: new Date('2026-07-20'),
             maxParticipants: 200,
-            currentParticipants: 0
+            currentParticipants: 0,
+            isActive: true
           },
           {
             name: '全国大学生英语演讲比赛',
@@ -60,7 +63,8 @@ export async function getCompetitions(category?: string) {
             description: '展示英语口语表达能力，提升跨文化交流技巧的全国性赛事。',
             deadline: new Date('2026-04-30'),
             maxParticipants: 300,
-            currentParticipants: 0
+            currentParticipants: 0,
+            isActive: true
           },
           {
             name: '创新创业项目路演大赛',
@@ -68,7 +72,8 @@ export async function getCompetitions(category?: string) {
             description: '展示创新创业项目，连接创业者和投资人的重要平台。',
             deadline: new Date('2026-08-10'),
             maxParticipants: 150,
-            currentParticipants: 0
+            currentParticipants: 0,
+            isActive: true
           }
         ]
       })
@@ -76,7 +81,10 @@ export async function getCompetitions(category?: string) {
 
     // 获取竞赛列表
     const competitions = await prisma.competition.findMany({
-      where: category ? { category } : {},
+      where: { 
+        isActive: true,
+        ...(category && { category })
+      },
       orderBy: { deadline: 'asc' }
     })
 
@@ -151,6 +159,15 @@ export async function registerCompetition(data: {
         success: false,
         message: '用户未登录'
       }
+    }
+
+    // 确保用户在数据库中存在（解决外键约束问题）
+    try {
+      const { syncUserToDatabase } = await import('@/lib/clerk')
+      await syncUserToDatabase(userId)
+    } catch (syncError) {
+      console.error('同步用户到数据库失败:', syncError)
+      // 继续执行，因为可能用户已经存在
     }
 
     // 验证必填字段

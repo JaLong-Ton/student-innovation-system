@@ -52,7 +52,6 @@ export function RegisterButton({ competitionId, isRegistered, isExpired, teacher
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [teacherOpen, setTeacherOpen] = useState(false)
-  const [selectedTeacherId, setSelectedTeacherId] = useState<string>('')
 
   const form = useForm<RegistrationFormData>({
     resolver: zodResolver(formSchema),
@@ -70,22 +69,26 @@ export function RegisterButton({ competitionId, isRegistered, isExpired, teacher
     try {
       const result = await registerCompetition({
         competitionId,
-        ...data,
-        teacherId: selectedTeacherId // 使用 Combobox 选择的老师ID
+        ...data
       })
       
       if (result.success) {
         toast.success('🎉 报名成功！')
         setIsDialogOpen(false)
         form.reset()
-        setSelectedTeacherId('') // 重置选择的老师
         // 刷新页面以更新状态
         window.location.reload()
       } else {
         toast.error(result.message || '报名失败，请稍后重试')
       }
     } catch (error) {
-      toast.error('报名失败，请稍后重试')
+      console.error('报名提交错误:', error)
+      // 显示详细错误信息，防止静默失败
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error('报名失败，请稍后重试')
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -199,59 +202,70 @@ export function RegisterButton({ competitionId, isRegistered, isExpired, teacher
             />
 
             {/* 选择指导老师 */}
-            <div className="space-y-2">
-              <Label>选择指导老师 (可选)</Label>
-              <Popover open={teacherOpen} onOpenChange={setTeacherOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={teacherOpen}
-                    className="w-full justify-between font-normal"
-                    disabled={isSubmitting}
-                  >
-                    {selectedTeacherId
-                      ? teachers.find((t) => t.id === selectedTeacherId)?.name + 
-                        ' (' + teachers.find((t) => t.id === selectedTeacherId)?.department + ')'
-                      : "搜索并选择指导老师..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="输入姓名或学院搜索..." />
-                    <CommandList>
-                      <CommandEmpty>未找到该老师，请检查拼写</CommandEmpty>
-                      <CommandGroup>
-                        {teachers.map((teacher) => (
-                          <CommandItem
-                            key={teacher.id}
-                            value={`${teacher.name} ${teacher.department}`} // 同时支持姓名和学院搜索
-                            onSelect={() => {
-                              setSelectedTeacherId(teacher.id === selectedTeacherId ? "" : teacher.id)
-                              setTeacherOpen(false)
-                            }}
-                          >
-                            <Check
-                              className={`mr-2 h-4 w-4 ${
-                                selectedTeacherId === teacher.id ? "opacity-100" : "opacity-0"
-                              }`}
-                            />
-                            {teacher.name}
-                            <span className="ml-2 text-xs text-gray-500">
-                              [{teacher.department}]
-                            </span>
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <p className="text-sm text-gray-600">
-                选择指导老师有助于提升项目质量和竞争力
-              </p>
-            </div>
+            <FormField
+              control={form.control}
+              name="teacherId"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>选择指导老师 (可选)</FormLabel>
+                  <Popover open={teacherOpen} onOpenChange={setTeacherOpen} modal={true}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          type="button" // 核心修复：绝对禁止它触发表单提交！
+                          aria-expanded={teacherOpen}
+                          className="w-full justify-between font-normal"
+                          disabled={isSubmitting}
+                        >
+                          {field.value
+                            ? (teachers || []).find((t) => t.id === field.value)?.name + 
+                              ' (' + ((teachers || []).find((t) => t.id === field.value)?.department || '未知') + ')'
+                            : "搜索并选择指导老师..."}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="输入姓名或学院搜索..." />
+                        <CommandList>
+                          <CommandEmpty>未找到该老师，请检查拼写</CommandEmpty>
+                          <CommandGroup>
+                            {(teachers || []).map((teacher) => (
+                              <CommandItem
+                                key={teacher.id}
+                                value={`${teacher.name} ${teacher.department}`}
+                                onSelect={() => {
+                                  // 核心修复：直接将值写入表单管家
+                                  form.setValue("teacherId", field.value === teacher.id ? "" : teacher.id, { shouldValidate: true })
+                                  setTeacherOpen(false)
+                                }}
+                              >
+                                <Check
+                                  className={`mr-2 h-4 w-4 ${
+                                    field.value === teacher.id ? "opacity-100" : "opacity-0"
+                                  }`}
+                                />
+                                {teacher.name}
+                                <span className="ml-2 text-xs text-gray-500">
+                                  [{teacher.department}]
+                                </span>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormDescription>
+                    选择指导老师有助于提升项目质量和竞争力
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             {/* 报名说明/备注 */}
             <FormField

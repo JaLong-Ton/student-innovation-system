@@ -25,6 +25,12 @@ model Achievement {
   date      DateTime
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
+
+  // --- 性能优化索引 ---
+  // 优化学生【个人中心】获取自己成就的速度
+  @@index([userId])
+  // 优化成就列表按时间排序的速度
+  @@index([createdAt])
 }
 
 model Competition {
@@ -35,17 +41,30 @@ model Competition {
   category            String
   currentParticipants Int            @default(0)
   maxParticipants     Int
+  isActive            Boolean        @default(true)
   registrations       Registration[]
+
+  // --- 性能优化索引 ---
+  // 优化前台【竞赛大厅】过滤下架比赛的速度
+  @@index([isActive])
+  // 优化前台按分类筛选比赛的速度
+  @@index([category])
+  // 优化前台比赛列表按截止时间排序的速度
+  @@index([deadline])
 }
 
 model Teacher {
-  id          String   @id @default(cuid())
-  teacherNo   String   @unique
-  name        String
-  department  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String         @id @default(cuid())
+  teacherNo     String         @unique
+  name          String
+  department    String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   registrations Registration[]
+
+  // --- 性能优化索引 ---
+  // 优化按教师编号查询的速度
+  @@index([teacherNo])
 }
 
 model Registration {
@@ -53,14 +72,24 @@ model Registration {
   userId        String
   competitionId String
   status        String      @default("PENDING")
-  applicantName String?
-  projectName   String?
-  teamMembers   String?
-  teacherId     String?
-  notes         String?
-  feedback      String?     // 审批反馈或驳回原因
   createdAt     DateTime    @default(now())
+  applicantName String?
+  notes         String?
+  projectName   String?
+  teacherId     String?
+  teamMembers   String?
+  feedback      String?
   competition   Competition @relation(fields: [competitionId], references: [id])
-  user          User        @relation(fields: [userId], references: [id])
   teacher       Teacher?    @relation(fields: [teacherId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
+
+  // --- 性能优化索引 ---
+  // 优化后台【报名审批】列表的加载速度
+  @@index([status])
+  // 优化学生【个人中心】获取自己报名记录的速度
+  @@index([userId])
+  // 优化后台【单个赛事】获取名单及导出的速度
+  @@index([competitionId])
+  // 优化按时间排序的速度
+  @@index([createdAt])
 }

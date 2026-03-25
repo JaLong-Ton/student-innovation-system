@@ -1,8 +1,24 @@
+import { auth } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Trophy, Rocket, LineChart, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-export default function Home() {
+export default async function HomePage() {
+  // 1. 光速获取本地身份令牌
+  const { userId, sessionClaims } = await auth()
+
+  // 2. 智能分流：如果已登录，直接跳过首页
+  if (userId) {
+    const role = (sessionClaims as any)?.role
+    if (role === 'admin') {
+      redirect('/admin') // 管理员直达后台仪表盘
+    } else {
+      redirect('/competitions') // 学生直达竞赛大厅
+    }
+  }
+
+  // 3. 未登录游客：继续渲染原有的静态展示页 UI
   return (
     <main className="min-h-screen bg-white relative overflow-hidden">
       {/* 高级背景点缀 */}

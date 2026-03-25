@@ -34,7 +34,7 @@ export default async function AdminUsersPage() {
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={user.imageUrl} alt={user.firstName || '用户'} />
+                        <AvatarImage src={user.imageUrl || undefined} alt={user.firstName || '用户'} />
                         <AvatarFallback>
                           {(user.firstName?.[0] || 'U') + (user.lastName?.[0] || '')}
                         </AvatarFallback>

@@ -7,6 +7,8 @@ import { Plus, Calendar, Users, Edit, Trash2 } from 'lucide-react'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 import { DeleteCompetitionButton } from '@/components/admin/delete-competition-button'
+import { ExportCompetitionButton } from '@/components/admin/export-competition-button'
+import { ArchiveCompetitionButton } from '@/components/admin/archive-competition-button'
 
 export default async function AdminCompetitionsPage() {
   // 获取所有竞赛，按截止日期排序
@@ -85,11 +87,17 @@ export default async function AdminCompetitionsPage() {
                 <TableRow key={competition.id}>
                   <TableCell>
                     <div>
-                      <div className="font-medium text-gray-900">
-                        {competition.name}
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="font-medium text-gray-900 truncate max-w-[300px]">
+                          {competition.name}
+                        </div>
+                        {/* 状态徽章 */}
+                        <Badge className={competition.isActive ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'}>
+                          {competition.isActive ? '进行中' : '已归档'}
+                        </Badge>
                       </div>
                       {competition.description && (
-                        <div className="text-sm text-gray-500 mt-1 line-clamp-2">
+                        <div className="text-sm text-gray-500 break-all line-clamp-2 max-w-[300px]">
                           {competition.description}
                         </div>
                       )}
@@ -135,9 +143,13 @@ export default async function AdminCompetitionsPage() {
                           编辑
                         </Link>
                       </Button>
-                      <DeleteCompetitionButton 
+                      <ExportCompetitionButton 
                         competitionId={competition.id}
                         competitionName={competition.name}
+                      />
+                      <ArchiveCompetitionButton 
+                        competitionId={competition.id}
+                        isActive={competition.isActive}
                       />
                     </div>
                   </TableCell>
