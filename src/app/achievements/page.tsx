@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { Plus, Trophy, FileText, Lightbulb } from 'lucide-react'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
+import { Achievement } from '@prisma/client'
 
 export const dynamic = 'force-dynamic';
 
@@ -111,7 +112,7 @@ export default async function AchievementsPage() {
         </Card>
       ) : (
         <div className="grid gap-4">
-          {achievements.map((achievement) => (
+          {achievements.map((achievement: Achievement) => (
             <Card key={achievement.id} className="hover:shadow-lg transition-shadow">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
