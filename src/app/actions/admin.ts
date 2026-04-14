@@ -43,7 +43,7 @@ export async function getAllUsers() {
     })
 
     // 返回用户信息
-    return users.map(user => ({
+    return users.map((user: any) => ({
       id: user.id,
       firstName: user.name?.split(' ')[0] || null,
       lastName: user.name?.split(' ').slice(1).join(' ') || null,
