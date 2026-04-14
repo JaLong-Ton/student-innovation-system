@@ -1,10 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Achievement } from '@prisma/client'
 import { format } from 'date-fns'
 
 interface AchievementListProps {
-  achievements: Achievement[]
+  achievements: any[]
 }
 
 const typeLabels: Record<string, string> = {
