@@ -1,9 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Achievement } from '@prisma/client'
 import { Trophy, FileText, Lightbulb, Award } from 'lucide-react'
 
 interface StatsCardsProps {
-  achievements: Achievement[]
+  achievements: any[]
 }
 
 export function StatsCards({ achievements }: StatsCardsProps) {
