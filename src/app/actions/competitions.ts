@@ -100,7 +100,7 @@ export async function getCompetitions(category?: string) {
         where: { userId },
         select: { competitionId: true }
       })
-      userRegistrations = registrations.map(reg => reg.competitionId)
+      userRegistrations = registrations.map((reg: any) => reg.competitionId)
     }
 
     // 为每个竞赛添加报名状态
