@@ -1,0 +1,155 @@
+{
+  "node": {
+    "0087a81602afbcb96fc0f42025cebfd57790de3ef8": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": 84150,
+          "async": true,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "action-browser"
+      },
+      "exportedName": "invalidateCacheAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+    },
+    "001055d42c5193b11b2439eb132b9d97cf69d83409": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": 84150,
+          "async": true,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "createOrReadKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "0090734cd218cf339ef6a6a5315b9104cd8d845cb5": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": 84150,
+          "async": true,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "action-browser"
+      },
+      "exportedName": "deleteKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "409b21d6685e86a98da5abbfacde52626bbd3fa15e": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": 84150,
+          "async": true,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "action-browser"
+      },
+      "exportedName": "syncKeylessConfigAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "00c379a1f3991bb360b87158acbd8afa8e055e710b": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": 84150,
+          "async": true,
+          "exportedName": "fixExpiredCompetitions",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "fixExpiredCompetitions",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "00d563de31b50659adb46e1ae86f87952c70db04e1": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": 84150,
+          "async": true,
+          "exportedName": "getAvailableTeachers",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "getAvailableTeachers",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "400709c5bdefb2b5c25af1ca5b1e8555824ae3374d": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": 84150,
+          "async": true,
+          "exportedName": "registerCompetition",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "action-browser"
+      },
+      "exportedName": "registerCompetition",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "40766916b42ea154092e7f17977efbbc72a261e371": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": 84150,
+          "async": true,
+          "exportedName": "cancelRegistration",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "cancelRegistration",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "40a4d03fa87e3f64d9c1f7704e3e5fb46a529c8348": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": 84150,
+          "async": true,
+          "exportedName": "getCompetitions",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "getCompetitions",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "603946bc6ad17b043f9ee8c98cdde4df2cb13f1e86": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": 84150,
+          "async": true,
+          "exportedName": "resubmitRegistration",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "resubmitRegistration",
+      "filename": "src/app/actions/competitions.ts"
+    }
+  },
+  "edge": {}
+}

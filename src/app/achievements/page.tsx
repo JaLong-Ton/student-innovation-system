@@ -9,6 +9,8 @@ import { Plus, Trophy, FileText, Lightbulb } from 'lucide-react'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 
+export const dynamic = 'force-dynamic';
+
 // 获取成就类型图标
 function getAchievementIcon(type: string) {
   switch (type) {

@@ -186,39 +186,6 @@ export async function getAchievements() {
       orderBy: { createdAt: 'desc' },
     })
 
-    // 如果没有成就，返回一些测试数据用于演示
-    if (achievements.length === 0) {
-      return [
-        {
-          id: 'demo-1',
-          userId,
-          title: '全国大学生数学建模竞赛一等奖',
-          type: 'AWARD',
-          level: 'STATE',
-          date: new Date('2024-09-15'),
-          createdAt: new Date('2024-09-15')
-        },
-        {
-          id: 'demo-2',
-          userId,
-          title: '基于深度学习的图像识别算法研究',
-          type: 'PAPER',
-          level: 'PROVINCE',
-          date: new Date('2024-06-20'),
-          createdAt: new Date('2024-06-20')
-        },
-        {
-          id: 'demo-3',
-          userId,
-          title: '智能垃圾分类系统发明专利',
-          type: 'PATENT',
-          level: 'SCHOOL',
-          date: new Date('2024-03-10'),
-          createdAt: new Date('2024-03-10')
-        }
-      ]
-    }
-
     return achievements
   } catch (error) {
     console.error('获取成就列表失败:', error)

@@ -9,7 +9,8 @@ const testAchievements = [
     type: 'AWARD',
     level: 'STATE',
     date: new Date('2024-09-15'),
-    createdAt: new Date('2024-09-15')
+    createdAt: new Date('2024-09-15'),
+    status: 'APPROVED'
   },
   {
     id: 'demo-2',
@@ -18,7 +19,8 @@ const testAchievements = [
     type: 'PAPER',
     level: 'PROVINCE',
     date: new Date('2024-06-20'),
-    createdAt: new Date('2024-06-20')
+    createdAt: new Date('2024-06-20'),
+    status: 'APPROVED'
   },
   {
     id: 'demo-3',
@@ -27,7 +29,8 @@ const testAchievements = [
     type: 'PATENT',
     level: 'SCHOOL',
     date: new Date('2024-03-10'),
-    createdAt: new Date('2024-03-10')
+    createdAt: new Date('2024-03-10'),
+    status: 'APPROVED'
   }
 ]
 

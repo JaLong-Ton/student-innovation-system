@@ -1,0 +1,80 @@
+{
+  "node": {
+    "0087a81602afbcb96fc0f42025cebfd57790de3ef8": {
+      "workers": {
+        "app/setup-admin/page": {
+          "moduleId": 95059,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "layer": {
+        "app/setup-admin/page": "action-browser"
+      },
+      "exportedName": "invalidateCacheAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+    },
+    "001055d42c5193b11b2439eb132b9d97cf69d83409": {
+      "workers": {
+        "app/setup-admin/page": {
+          "moduleId": 95059,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/setup-admin/page": "rsc"
+      },
+      "exportedName": "createOrReadKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "0090734cd218cf339ef6a6a5315b9104cd8d845cb5": {
+      "workers": {
+        "app/setup-admin/page": {
+          "moduleId": 95059,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/setup-admin/page": "action-browser"
+      },
+      "exportedName": "deleteKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "409b21d6685e86a98da5abbfacde52626bbd3fa15e": {
+      "workers": {
+        "app/setup-admin/page": {
+          "moduleId": 95059,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/setup-admin/page": "action-browser"
+      },
+      "exportedName": "syncKeylessConfigAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "00d01936787ca04d27c5b270b52faebdf529ef7da7": {
+      "workers": {
+        "app/setup-admin/page": {
+          "moduleId": 95059,
+          "async": false,
+          "exportedName": "setCurrentUserAsAdmin",
+          "filename": "src/app/actions/setup-admin.ts"
+        }
+      },
+      "layer": {
+        "app/setup-admin/page": "action-browser"
+      },
+      "exportedName": "setCurrentUserAsAdmin",
+      "filename": "src/app/actions/setup-admin.ts"
+    }
+  },
+  "edge": {}
+}

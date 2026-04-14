@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/test-achievements/layout,_N_T_/test-achievements/page,_N_T_/test-achievements"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/test-achievements/__PAGE__",
+    "/test-achievements",
+    "/_index",
+    "/_head"
+  ]
+}

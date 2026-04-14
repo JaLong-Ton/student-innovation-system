@@ -1,0 +1,155 @@
+{
+  "node": {
+    "0029c9ba9d91b78525e275ab3b59c460f6bb47695e": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": "[project]/.next-internal/server/app/competitions/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/actions/competitions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "action-browser"
+      },
+      "exportedName": "deleteKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "006d1d0f601b0a4ee2b4436a78374edbb63dc85d2f": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": "[project]/.next-internal/server/app/competitions/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/actions/competitions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "action-browser"
+      },
+      "exportedName": "createOrReadKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "400115462d4b2c1ba499000198dc0a93a87d28dbc0": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": "[project]/.next-internal/server/app/competitions/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/actions/competitions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "action-browser"
+      },
+      "exportedName": "syncKeylessConfigAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "00ce15c2b2996272aaf813c5e51e601211971af048": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": "[project]/.next-internal/server/app/competitions/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/actions/competitions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "action-browser"
+      },
+      "exportedName": "invalidateCacheAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+    },
+    "005fb073d9904eff3e85c9514f05a83bf172e70a87": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": "[project]/.next-internal/server/app/competitions/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/actions/competitions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "getAvailableTeachers",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "getAvailableTeachers",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "00d7967953c67e01b41cea4cd01b55282611862497": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": "[project]/.next-internal/server/app/competitions/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/actions/competitions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "fixExpiredCompetitions",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "fixExpiredCompetitions",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "400df771ce0a48cf632c07f38d4118592a5793a53f": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": "[project]/.next-internal/server/app/competitions/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/actions/competitions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "cancelRegistration",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "cancelRegistration",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "40d3df32856f750dd4617dcf1415f39775c2c9add2": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": "[project]/.next-internal/server/app/competitions/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/actions/competitions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "registerCompetition",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "action-browser"
+      },
+      "exportedName": "registerCompetition",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "40da1ee1ea4e7e34d99ad079c5cf24a57bb21a18d3": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": "[project]/.next-internal/server/app/competitions/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/actions/competitions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "getCompetitions",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "getCompetitions",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "6082148d9910a48095d7b2999e57fe92c028b309e7": {
+      "workers": {
+        "app/competitions/page": {
+          "moduleId": "[project]/.next-internal/server/app/competitions/page/actions.js { ACTIONS_MODULE0 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js [app-rsc] (ecmascript)\", ACTIONS_MODULE2 => \"[project]/src/app/actions/competitions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": true,
+          "exportedName": "resubmitRegistration",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/competitions/page": "rsc"
+      },
+      "exportedName": "resubmitRegistration",
+      "filename": "src/app/actions/competitions.ts"
+    }
+  },
+  "edge": {}
+}

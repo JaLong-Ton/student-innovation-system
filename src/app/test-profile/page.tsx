@@ -10,7 +10,8 @@ const mockAchievements = [
     level: 'STATE',
     date: new Date('2024-01-15'),
     userId: 'test-user',
-    createdAt: new Date()
+    createdAt: new Date(),
+    status: 'APPROVED'
   },
   {
     id: '2',
@@ -19,7 +20,8 @@ const mockAchievements = [
     level: 'PROVINCE',
     date: new Date('2024-03-20'),
     userId: 'test-user',
-    createdAt: new Date()
+    createdAt: new Date(),
+    status: 'APPROVED'
   }
 ]
 

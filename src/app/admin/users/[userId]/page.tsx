@@ -6,6 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { prisma } from '@/lib/prisma'
 import { Trophy, FileText, Lightbulb, Calendar, User } from 'lucide-react'
 
+export const dynamic = 'force-dynamic';
+
 interface UserAchievementsPageProps {
   params: Promise<{ userId: string }>
 }

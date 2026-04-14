@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { EditCompetitionForm } from '@/components/admin/edit-competition-form'
 
+export const dynamic = 'force-dynamic';
+
 interface EditCompetitionPageProps {
   params: Promise<{ id: string }>
 }

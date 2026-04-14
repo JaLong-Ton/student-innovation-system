@@ -1,14 +1,6 @@
-[00:00:01.329] Server  WARN    ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-[00:00:01.584] Server  LOG     ✓ Ready in 1073ms
-[00:00:15.523] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:16.870] Browser WARN    Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview
-[00:01:54.859] Server  ERROR   ⨯ TypeError: auth(...).protect is not a function
-[00:01:56.437] Server  ERROR   ⨯ TypeError: auth(...).protect is not a function
-[00:01:57.178] Browser ERROR   uncaughtError: TypeError: auth(...).protect is not a function
-[00:02:44.115] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:44.567] Browser WARN    Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview
-[00:02:46.068] Server  ERROR   ⨯ TypeError: auth(...).protect is not a function
-[00:02:46.285] Server  ERROR   ⨯ TypeError: auth(...).protect is not a function
-[00:02:46.781] Browser ERROR   uncaughtError: TypeError: auth(...).protect is not a function
-[00:02:48.548] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:49.079] Browser WARN    Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview
+[00:00:01.524] Server  WARN    ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:01.762] Server  LOG     ✓ Ready in 1215ms
+[00:00:10.897] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:14.108] Browser WARN    Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview
+[00:02:20.583] Server  LOG     ✓ Compiled in 2s
+[00:51:15.448] Server  LOG     ✓ Compiled in 412ms

@@ -13,6 +13,7 @@ import { zhCN } from 'date-fns/locale'
 import { toast } from 'sonner'
 import { resubmitRegistration } from '@/app/actions/competitions'
 import { Edit3 } from 'lucide-react'
+import { CancelRegistrationButton } from './cancel-registration-button'
 
 interface RegistrationListProps {
   registrations: Array<{
@@ -28,6 +29,7 @@ interface RegistrationListProps {
       id: string
       name: string
       category?: string
+      deadline: Date
     }
     teacher?: {
       id: string
@@ -42,9 +44,10 @@ interface RegistrationListProps {
     teacherNo: string
     department?: string
   }>
+  showCancelButton?: boolean // 新增：是否显示取消按钮
 }
 
-export function RegistrationList({ registrations, teachers = [] }: RegistrationListProps) {
+export function RegistrationList({ registrations, teachers = [], showCancelButton = true }: RegistrationListProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [editingRegistration, setEditingRegistration] = useState<any>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -123,6 +126,17 @@ export function RegistrationList({ registrations, teachers = [] }: RegistrationL
     })
   }
 
+  // 检查是否可以取消报名
+  const canCancelRegistration = (registration: any) => {
+    const now = new Date()
+    const deadline = new Date(registration.competition.deadline)
+    const status = registration.status?.toString().toUpperCase()
+    
+    // 比赛未截止且状态允许取消
+    return now <= deadline && 
+           ['PENDING', 'REJECTED_RETRY', 'REJECTED', 'rejected_retry', 'rejected'].includes(status)
+  }
+
   if (registrations.length === 0) {
     return (
       <div className="text-center py-12">
@@ -148,9 +162,15 @@ export function RegistrationList({ registrations, teachers = [] }: RegistrationL
                 <h3 className="text-lg font-semibold text-gray-900 flex-1 mr-3">
                   {registration.competition.name}
                 </h3>
-                <Badge className={statusInfo.className}>
-                  {statusInfo.label}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Badge className={statusInfo.className}>
+                    {statusInfo.label}
+                  </Badge>
+                  {/* 关键：如果是待审核状态，显示取消按钮 */}
+                  {showCancelButton && canCancelRegistration(registration) && (
+                    <CancelRegistrationButton registrationId={registration.id} />
+                  )}
+                </div>
               </div>
 
               {/* 次行细节 */}

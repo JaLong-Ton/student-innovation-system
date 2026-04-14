@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[97367,["/_next/static/chunks/b9c3b895c4f03548.js","/_next/static/chunks/51d1afba208ae91e.js","/_next/static/chunks/a2dfb6fc5208ab9b.js","/_next/static/chunks/0e502b0f4cd1d7f4.js"],"ViewportBoundary"]
+3:I[97367,["/_next/static/chunks/b9c3b895c4f03548.js","/_next/static/chunks/51d1afba208ae91e.js","/_next/static/chunks/a2dfb6fc5208ab9b.js","/_next/static/chunks/0e502b0f4cd1d7f4.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+0:{"buildId":"TUv3Rm_bT_hXxOSB29PTv","rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"  大学生双创系统"}],["$","meta","1",{"name":"description","content":"大学生创新创业助手平台"}]]}]}]}],null]}],"loading":null,"isPartial":false}

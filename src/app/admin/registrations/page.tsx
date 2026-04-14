@@ -2,6 +2,8 @@ import { getAllRegistrations } from '@/app/actions/admin'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { RegistrationDataTable } from '@/components/admin/registration-data-table'
 
+export const dynamic = 'force-dynamic';
+
 export default async function RegistrationsPage() {
   const registrations = await getAllRegistrations()
 

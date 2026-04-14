@@ -11,6 +11,8 @@ import { toast } from 'sonner'
 import { TeacherImportButton } from '@/components/admin/teacher-import-button'
 import { TeacherDataTable } from '@/components/admin/teacher-data-table'
 
+export const dynamic = 'force-dynamic';
+
 export default function TeachersManagementPage() {
   const [teachers, setTeachers] = useState<any[]>([])
   const [isDialogOpen, setIsDialogOpen] = useState(false)

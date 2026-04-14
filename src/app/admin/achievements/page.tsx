@@ -1,13 +1,20 @@
+'use client'
+
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
-import { getAllAchievements } from '@/app/actions/admin'
+import { getAllAchievements, approveAchievement, rejectAchievement } from '@/app/actions/admin'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search, Filter, Trophy, Award, FileText, Lightbulb } from 'lucide-react'
+import { Search, Filter, Trophy, Award, FileText, Lightbulb, Check, X } from 'lucide-react'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
+import { useTransition } from 'react'
+import { toast } from 'sonner'
+import { useEffect, useState } from 'react'
+
+export const dynamic = 'force-dynamic';
 
 // 成就类型图标映射
 const achievementIcons = {
@@ -30,14 +37,72 @@ const levelNames: Record<string, string> = {
   SCHOOL: '校级'
 }
 
-export default async function AchievementsPage() {
-  const { userId } = await auth()
-  
-  if (!userId) {
-    redirect('/sign-in')
+// 成就状态映射
+const statusConfig: Record<string, { label: string; color: string }> = {
+  PENDING: {
+    label: '审核中',
+    color: 'bg-yellow-100 text-yellow-800 border-yellow-200'
+  },
+  APPROVED: {
+    label: '已认证',
+    color: 'bg-green-100 text-green-800 border-green-200'
+  },
+  REJECTED: {
+    label: '已驳回',
+    color: 'bg-red-100 text-red-800 border-red-200'
+  }
+}
+
+export default function AchievementsPage() {
+  const [achievements, setAchievements] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isPending, startTransition] = useTransition()
+
+  useEffect(() => {
+    const loadAchievements = async () => {
+      try {
+        const data = await getAllAchievements()
+        setAchievements(data)
+      } catch (error) {
+        console.error('加载成就失败:', error)
+        toast.error('加载成就失败')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadAchievements()
+  }, [])
+
+  const handleApprove = (achievementId: string) => {
+    startTransition(async () => {
+      const result = await approveAchievement(achievementId)
+      if (result.success) {
+        toast.success(result.message)
+        // 更新本地状态
+        setAchievements(prev => 
+          prev.map(a => a.id === achievementId ? { ...a, status: 'APPROVED' } : a)
+        )
+      } else {
+        toast.error(result.message)
+      }
+    })
   }
 
-  const achievements = await getAllAchievements()
+  const handleReject = (achievementId: string) => {
+    startTransition(async () => {
+      const result = await rejectAchievement(achievementId)
+      if (result.success) {
+        toast.success(result.message)
+        // 更新本地状态
+        setAchievements(prev => 
+          prev.map(a => a.id === achievementId ? { ...a, status: 'REJECTED' } : a)
+        )
+      } else {
+        toast.error(result.message)
+      }
+    })
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -88,18 +153,24 @@ export default async function AchievementsPage() {
             const IconComponent = achievementIcons[achievement.type as keyof typeof achievementIcons] || Trophy
             const levelColor = levelColors[achievement.level] || levelColors.SCHOOL
             const levelName = levelNames[achievement.level] || levelNames.SCHOOL
+            const statusInfo = statusConfig[achievement.status] || statusConfig.PENDING
 
             return (
               <Card key={achievement.id} className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div className="flex justify-between items-start mb-2 gap-2">
+                    {/* 左边：图标 + 标题 */}
+                    <div className="flex-1 min-w-0 flex items-start gap-3 pr-2">
+                      <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
                         <IconComponent className="h-5 w-5 text-blue-600" />
                       </div>
-                      <div>
-                        <CardTitle className="text-lg truncate">{achievement.title}</CardTitle>
-                        <div className="flex items-center gap-2 mt-1">
+                      <div className="flex-1 min-w-0">
+                        {/* 关键修复：给标题加上防撑破属性 */}
+                        <CardTitle className="text-lg font-bold text-gray-900 line-clamp-2 break-all leading-tight">
+                          {achievement.title}
+                        </CardTitle>
+                        {/* 修复：标签行使用 flex-wrap 防止撑破 */}
+                        <div className="flex flex-wrap gap-2 mt-1">
                           <Badge className={levelColor}>
                             {levelName}
                           </Badge>
@@ -107,9 +178,35 @@ export default async function AchievementsPage() {
                             {achievement.type === 'AWARD' ? '奖项' : 
                              achievement.type === 'PAPER' ? '论文' : '专利'}
                           </Badge>
+                          <Badge className={statusInfo.color}>
+                            {statusInfo.label}
+                          </Badge>
                         </div>
                       </div>
                     </div>
+                    
+                    {/* 右边：操作按钮区域（关键修复：加上 shrink-0 防止被挤压） */}
+                    {achievement.status === 'PENDING' && (
+                      <div className="shrink-0 flex items-center gap-1">
+                        <Button
+                          size="sm"
+                          onClick={() => handleApprove(achievement.id)}
+                          disabled={isPending}
+                          className="h-8 px-2 bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          <Check className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => handleReject(achievement.id)}
+                          disabled={isPending}
+                          variant="destructive"
+                          className="h-8 px-2"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </CardHeader>
                 <CardContent>

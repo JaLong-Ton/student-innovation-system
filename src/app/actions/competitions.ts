@@ -33,6 +33,7 @@ export async function getCompetitions(category?: string) {
           {
             name: '全国大学生自动化控制设计大赛',
             category: 'TECHNICAL',
+            level: 'STATE',
             description: '面向全国高校学生的自动化控制设计竞赛，鼓励创新思维和工程实践能力。',
             deadline: new Date('2026-06-30'),
             maxParticipants: 500,
@@ -42,6 +43,7 @@ export async function getCompetitions(category?: string) {
           {
             name: 'C++算法与数据结构挑战赛',
             category: 'PROGRAMMING',
+            level: 'PROVINCE',
             description: '考验参赛者的C++编程能力和算法思维，包含多种数据结构题目。',
             deadline: new Date('2026-05-15'),
             maxParticipants: 1000,
@@ -51,6 +53,7 @@ export async function getCompetitions(category?: string) {
           {
             name: 'AI与地质灾害预测创新应用赛',
             category: 'AI',
+            level: 'STATE',
             description: '运用人工智能技术解决地质灾害预测问题，推动AI在防灾减灾中的应用。',
             deadline: new Date('2026-07-20'),
             maxParticipants: 200,
@@ -60,6 +63,7 @@ export async function getCompetitions(category?: string) {
           {
             name: '全国大学生英语演讲比赛',
             category: 'LANGUAGE',
+            level: 'STATE',
             description: '展示英语口语表达能力，提升跨文化交流技巧的全国性赛事。',
             deadline: new Date('2026-04-30'),
             maxParticipants: 300,
@@ -69,6 +73,7 @@ export async function getCompetitions(category?: string) {
           {
             name: '创新创业项目路演大赛',
             category: 'INNOVATION',
+            level: 'PROVINCE',
             description: '展示创新创业项目，连接创业者和投资人的重要平台。',
             deadline: new Date('2026-08-10'),
             maxParticipants: 150,
@@ -213,8 +218,15 @@ export async function registerCompetition(data: {
       }
     }
 
-    // 检查是否已达人数上限
-    if (competition.currentParticipants >= competition.maxParticipants) {
+    // NOTE: 使用实时 count 查询来检查是否满员，而非依赖可能不一致的 currentParticipants 字段
+    const activeRegistrationCount = await prisma.registration.count({
+      where: {
+        competitionId: data.competitionId,
+        status: { notIn: ['REJECTED_FINAL'] }  // 只有彻底驳回的不算名额占用
+      }
+    })
+
+    if (activeRegistrationCount >= competition.maxParticipants) {
       return {
         success: false,
         message: '竞赛报名人数已满'
@@ -249,14 +261,16 @@ export async function registerCompetition(data: {
       }
     })
 
-    // 更新竞赛参与人数
+    // NOTE: 同步更新 currentParticipants 为真实计数值（保证与数据库一致）
+    const updatedCount = await prisma.registration.count({
+      where: {
+        competitionId: data.competitionId,
+        status: { notIn: ['REJECTED_FINAL'] }
+      }
+    })
     await prisma.competition.update({
       where: { id: data.competitionId },
-      data: {
-        currentParticipants: {
-          increment: 1
-        }
-      }
+      data: { currentParticipants: updatedCount }
     })
 
     // 重新验证缓存
@@ -361,5 +375,76 @@ export async function resubmitRegistration(registrationId: string, data: {
   } catch (error) {
     console.error('重新提交报名失败:', error)
     throw error instanceof Error ? error : new Error('重新提交报名失败，请稍后重试')
+  }
+}
+
+/**
+ * 取消报名（学生使用）
+ */
+export async function cancelRegistration(registrationId: string) {
+  const { userId } = await auth()
+  if (!userId) throw new Error('未登录')
+
+  try {
+    // 1. 先查询该报名记录，确保是本人的，且确实存在
+    const registration = await prisma.registration.findUnique({
+      where: { id: registrationId },
+      include: {
+        competition: {
+          select: {
+            deadline: true,
+            currentParticipants: true
+          }
+        }
+      }
+    })
+
+    if (!registration || registration.userId !== userId) {
+      throw new Error('找不到该报名记录或无权操作')
+    }
+
+    // 2. 检查是否可以取消（比赛未截止且状态允许）
+    if (new Date() > registration.competition.deadline) {
+      throw new Error('比赛已截止，无法取消报名')
+    }
+
+    if (registration.status === 'REJECTED_FINAL') {
+      throw new Error('已被最终驳回，无法取消报名')
+    }
+
+    // 3. 开启原子事务：删除记录 + 释放名额
+    await prisma.$transaction([
+      // 操作 A：彻底删除这条报名记录
+      prisma.registration.delete({
+        where: { id: registrationId }
+      }),
+      // 操作 B：对应的比赛报名人数安全减 1（不能低于 0）
+      prisma.competition.update({
+        where: { 
+          id: registration.competitionId,
+          currentParticipants: {
+            gt: 0 // 确保当前人数大于0才减
+          }
+        },
+        data: {
+          currentParticipants: {
+            decrement: 1
+          }
+        }
+      })
+    ])
+
+    // 刷新缓存
+    revalidatePath('/profile')
+    revalidatePath('/competitions')
+
+    return { 
+      success: true,
+      message: '报名已取消，名额已释放'
+    }
+
+  } catch (error) {
+    console.error('取消报名失败:', error)
+    throw error instanceof Error ? error : new Error('取消报名失败，请稍后重试')
   }
 }

@@ -7,6 +7,8 @@ import { DashboardCharts } from '@/components/admin/dashboard-charts'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminDashboard() {
   const stats = await getDashboardStats()
 

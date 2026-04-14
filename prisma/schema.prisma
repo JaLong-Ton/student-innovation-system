@@ -22,6 +22,7 @@ model Achievement {
   title     String
   type      String
   level     String
+  status    String   @default("PENDING") // 状态：PENDING(待审核) / APPROVED(已通过) / REJECTED(已驳回)
   date      DateTime
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
@@ -31,6 +32,8 @@ model Achievement {
   @@index([userId])
   // 优化成就列表按时间排序的速度
   @@index([createdAt])
+  // 优化按状态筛选成就的速度
+  @@index([status])
 }
 
 model Competition {
@@ -39,6 +42,7 @@ model Competition {
   description         String?
   deadline            DateTime
   category            String
+  level               String         @default("校级") // 赛事级别：校级/市级/省级/国家级/国际级
   currentParticipants Int            @default(0)
   maxParticipants     Int
   isActive            Boolean        @default(true)
@@ -49,6 +53,8 @@ model Competition {
   @@index([isActive])
   // 优化前台按分类筛选比赛的速度
   @@index([category])
+  // 优化前台按级别筛选比赛的速度
+  @@index([level])
   // 优化前台比赛列表按截止时间排序的速度
   @@index([deadline])
 }

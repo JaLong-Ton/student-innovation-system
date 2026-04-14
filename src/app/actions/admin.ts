@@ -148,6 +148,7 @@ export async function adminDeleteAchievement(achievementId: string) {
 export async function createCompetition(data: {
   name: string
   category: string
+  level?: string
   description?: string
   deadline: string
   maxParticipants: string
@@ -193,11 +194,16 @@ export async function createCompetition(data: {
       }
     }
     
+    // 验证竞赛级别
+    const validLevels = ['校级', '市级', '省级', '国家级', '国际级']
+    const level = data.level && validLevels.includes(data.level) ? data.level : '校级'
+
     // 创建竞赛
     const competition = await prisma.competition.create({
       data: {
         name: data.name.trim(),
         category: data.category,
+        level,
         description: data.description?.trim() || '',
         deadline: deadlineDate,
         maxParticipants: maxParticipantsNum,
@@ -230,6 +236,7 @@ export async function createCompetition(data: {
 export async function updateCompetition(id: string, data: {
   name: string
   category: string
+  level?: string
   description?: string
   deadline: string
   maxParticipants: string
@@ -287,12 +294,17 @@ export async function updateCompetition(id: string, data: {
       }
     }
     
+    // 验证竞赛级别
+    const validLevels = ['校级', '市级', '省级', '国家级', '国际级']
+    const level = data.level && validLevels.includes(data.level) ? data.level : '校级'
+
     // 更新竞赛
     const competition = await prisma.competition.update({
       where: { id },
       data: {
         name: data.name.trim(),
         category: data.category,
+        level,
         description: data.description?.trim() || '',
         deadline: deadlineDate,
         maxParticipants: maxParticipantsNum
@@ -591,52 +603,24 @@ export async function reviewRegistration(registrationId: string, status: string,
       }
     })
 
-    // 如果审批通过，自动生成成就记录
-    if (status === 'APPROVED') {
-      try {
-        // 检查是否已存在相同的成就记录（避免重复生成）
-        const existingAchievement = await prisma.achievement.findFirst({
-          where: {
-            userId: existingRegistration.userId,
-            title: existingRegistration.competition.name,
-            type: 'AWARD' // 竞赛获奖默认为奖项类型
-          }
-        })
-
-        if (!existingAchievement) {
-          // 根据竞赛类别确定成就级别
-          let achievementLevel: 'STATE' | 'PROVINCE' | 'SCHOOL' = 'SCHOOL'
-          if (existingRegistration.competition.category === 'TECHNICAL' || 
-              existingRegistration.competition.category === 'AI') {
-            achievementLevel = 'STATE'
-          } else if (existingRegistration.competition.category === 'PROGRAMMING' || 
-                     existingRegistration.competition.category === 'INNOVATION') {
-            achievementLevel = 'PROVINCE'
-          }
-
-          // 创建成就记录
-          await prisma.achievement.create({
-            data: {
-              userId: existingRegistration.userId,
-              title: existingRegistration.competition.name,
-              type: 'AWARD',
-              level: achievementLevel,
-              date: new Date(), // 使用审批通过的时间作为获得时间
-            }
-          })
-
-          console.log(`已为用户 ${existingRegistration.userId} 自动生成成就记录：${existingRegistration.competition.name}`)
-        }
-      } catch (achievementError) {
-        console.error('自动生成成就记录失败:', achievementError)
-        // 不影响审批流程，只记录错误
+    // NOTE: 审批操作后同步 currentParticipants 为真实计数值
+    const updatedCount = await prisma.registration.count({
+      where: {
+        competitionId: existingRegistration.competitionId,
+        status: { notIn: ['REJECTED_FINAL'] }
       }
-    }
+    })
+    await prisma.competition.update({
+      where: { id: existingRegistration.competitionId },
+      data: { currentParticipants: updatedCount }
+    })
 
     // 重新验证缓存
     revalidatePath('/admin/registrations')
     revalidatePath('/profile')
-    revalidatePath('/admin/achievements') // 刷新管理员成就页面（如果存在）
+    revalidatePath('/competitions')
+    revalidatePath('/admin/competitions')
+    revalidatePath('/admin/achievements')
 
     return {
       success: true,
@@ -922,54 +906,27 @@ export async function batchReviewRegistrations(
       }
     })
 
-    // 如果审批通过，批量生成成就记录
-    if (status === 'APPROVED') {
-      try {
-        for (const registration of registrationsToUpdate) {
-          // 检查是否已存在相同的成就记录（避免重复生成）
-          const existingAchievement = await prisma.achievement.findFirst({
-            where: {
-              userId: registration.userId,
-              title: registration.competition.name,
-              type: 'AWARD' // 竞赛获奖默认为奖项类型
-            }
-          })
-
-          if (!existingAchievement) {
-            // 根据竞赛类别确定成就级别
-            let achievementLevel: 'STATE' | 'PROVINCE' | 'SCHOOL' = 'SCHOOL'
-            if (registration.competition.category === 'TECHNICAL' || 
-                registration.competition.category === 'AI') {
-              achievementLevel = 'STATE'
-            } else if (registration.competition.category === 'PROGRAMMING' || 
-                       registration.competition.category === 'INNOVATION') {
-              achievementLevel = 'PROVINCE'
-            }
-
-            // 创建成就记录
-            await prisma.achievement.create({
-              data: {
-                userId: registration.userId,
-                title: registration.competition.name,
-                type: 'AWARD',
-                level: achievementLevel,
-                date: new Date(), // 使用审批通过的时间作为获得时间
-              }
-            })
-
-            console.log(`已为用户 ${registration.userId} 自动生成成就记录：${registration.competition.name}`)
-          }
+    // NOTE: 批量审批后同步所有涉及竞赛的 currentParticipants
+    const affectedCompetitionIds = [...new Set(registrationsToUpdate.map(r => r.competitionId))]
+    for (const compId of affectedCompetitionIds) {
+      const updatedCount = await prisma.registration.count({
+        where: {
+          competitionId: compId,
+          status: { notIn: ['REJECTED_FINAL'] }
         }
-      } catch (achievementError) {
-        console.error('批量生成成就记录失败:', achievementError)
-        // 不影响审批流程，只记录错误
-      }
+      })
+      await prisma.competition.update({
+        where: { id: compId },
+        data: { currentParticipants: updatedCount }
+      })
     }
 
     // 重新验证缓存
     revalidatePath('/admin/registrations')
     revalidatePath('/profile')
-    revalidatePath('/admin/achievements') // 刷新管理员成就页面（如果存在）
+    revalidatePath('/competitions')
+    revalidatePath('/admin/competitions')
+    revalidatePath('/admin/achievements')
 
     return {
       success: true,
@@ -1112,6 +1069,86 @@ export async function toggleCompetitionArchive(id: string, currentStatus: boolea
     return {
       success: false,
       message: error instanceof Error ? error.message : '切换竞赛状态失败，请稍后重试'
+    }
+  }
+}
+
+/**
+ * 审核通过成就
+ */
+export async function approveAchievement(achievementId: string) {
+  await verifyAdminPermission()
+  
+  try {
+    const achievement = await prisma.achievement.findUnique({
+      where: { id: achievementId }
+    })
+
+    if (!achievement) {
+      return {
+        success: false,
+        message: '成就记录不存在'
+      }
+    }
+
+    await prisma.achievement.update({
+      where: { id: achievementId },
+      data: { status: 'APPROVED' }
+    })
+
+    revalidatePath('/admin/achievements')
+    revalidatePath('/profile')
+
+    return {
+      success: true,
+      message: '成就审核通过！'
+    }
+
+  } catch (error) {
+    console.error('审核通过成就失败:', error)
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : '审核通过成就失败，请稍后重试'
+    }
+  }
+}
+
+/**
+ * 驳回成就
+ */
+export async function rejectAchievement(achievementId: string) {
+  await verifyAdminPermission()
+  
+  try {
+    const achievement = await prisma.achievement.findUnique({
+      where: { id: achievementId }
+    })
+
+    if (!achievement) {
+      return {
+        success: false,
+        message: '成就记录不存在'
+      }
+    }
+
+    await prisma.achievement.update({
+      where: { id: achievementId },
+      data: { status: 'REJECTED' }
+    })
+
+    revalidatePath('/admin/achievements')
+    revalidatePath('/profile')
+
+    return {
+      success: true,
+      message: '成就已驳回！'
+    }
+
+  } catch (error) {
+    console.error('驳回成就失败:', error)
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : '驳回成就失败，请稍后重试'
     }
   }
 }

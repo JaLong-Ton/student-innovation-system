@@ -1,0 +1,365 @@
+{
+  "node": {
+    "0087a81602afbcb96fc0f42025cebfd57790de3ef8": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/page": "action-browser"
+      },
+      "exportedName": "invalidateCacheAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+    },
+    "001055d42c5193b11b2439eb132b9d97cf69d83409": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "createOrReadKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "0090734cd218cf339ef6a6a5315b9104cd8d845cb5": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/page": "action-browser"
+      },
+      "exportedName": "deleteKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "409b21d6685e86a98da5abbfacde52626bbd3fa15e": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/page": "action-browser"
+      },
+      "exportedName": "syncKeylessConfigAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "00487d6eb43b190ad336031954bee99b15654c7691": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "verifyAdminPermission",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "verifyAdminPermission",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "004c12c674280cf58778904952f68d7e7062c022cd": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "getAllRegistrations",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "getAllRegistrations",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "0053e93f2aaba6d230f6cb82f50b4aebc98da7f5aa": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "getTeachers",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "getTeachers",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "00703b6e6cdc1150ac31021ab34e6495a268a3a8f4": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "getAllAchievements",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "getAllAchievements",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "00cc07f48b1e06c4bb19022219a94c2838899a00f4": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "getDashboardStats",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "getDashboardStats",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "00d60a08d433b66ad8cd713a33b041942bea098266": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "getAllUsers",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "getAllUsers",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "402d18dc9045dd734953146ac16e35e8a7a6fd0039": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "batchImportTeachers",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "batchImportTeachers",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "404ef546200be1f51ce12a762d7d07ebea8456ee6f": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "deleteCompetition",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "deleteCompetition",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "405064b7b83c1bd88589d4bf9ef60b8b26504c8e99": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "getAchievementsByUserId",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "getAchievementsByUserId",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "40508ab452c2174daaf39a47a17a49bd376f31e48c": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "createTeacher",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "createTeacher",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "4068e4f216d2177170bb364ed9ae17bd615a1ef7ed": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "getExportData",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "getExportData",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "407104fcb584299d8e45161981bb21a44f91018c77": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "approveAchievement",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "approveAchievement",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "4082a88ad67f2840e311f294e26b56a69e26e7090a": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "createCompetition",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "createCompetition",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "4086cbfcd52a9888a061ab0a14a993af9a2a96edf1": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "rejectAchievement",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "rejectAchievement",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "40b0d3be18768374da4f23126f595b956757bf5633": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "deleteTeacher",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "deleteTeacher",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "40ff25f7b151e4439ba05eec0a07bf301e8803aba5": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "adminDeleteAchievement",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "adminDeleteAchievement",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "6058ea5ebb19aa48be9f91d292a5a7217ee25e468f": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "updateCompetition",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "updateCompetition",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "60c83c90963b25520f7642fbdc902c1cf360ddb39d": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "toggleCompetitionArchive",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "toggleCompetitionArchive",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "70675934f021dfca20112d397170841756da075b63": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "reviewRegistration",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "reviewRegistration",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "70cf691f5b1800173e3e7178ac8f3db1aee3cd7069": {
+      "workers": {
+        "app/admin/page": {
+          "moduleId": 47756,
+          "async": true,
+          "exportedName": "batchReviewRegistrations",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/page": "rsc"
+      },
+      "exportedName": "batchReviewRegistrations",
+      "filename": "src/app/actions/admin.ts"
+    }
+  },
+  "edge": {}
+}

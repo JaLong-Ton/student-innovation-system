@@ -1,0 +1,95 @@
+{
+  "node": {
+    "0087a81602afbcb96fc0f42025cebfd57790de3ef8": {
+      "workers": {
+        "app/admin/competitions/page": {
+          "moduleId": 36929,
+          "async": true,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/competitions/page": "action-browser"
+      },
+      "exportedName": "invalidateCacheAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+    },
+    "001055d42c5193b11b2439eb132b9d97cf69d83409": {
+      "workers": {
+        "app/admin/competitions/page": {
+          "moduleId": 36929,
+          "async": true,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/competitions/page": "rsc"
+      },
+      "exportedName": "createOrReadKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "0090734cd218cf339ef6a6a5315b9104cd8d845cb5": {
+      "workers": {
+        "app/admin/competitions/page": {
+          "moduleId": 36929,
+          "async": true,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/competitions/page": "action-browser"
+      },
+      "exportedName": "deleteKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "409b21d6685e86a98da5abbfacde52626bbd3fa15e": {
+      "workers": {
+        "app/admin/competitions/page": {
+          "moduleId": 36929,
+          "async": true,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/competitions/page": "action-browser"
+      },
+      "exportedName": "syncKeylessConfigAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "4068e4f216d2177170bb364ed9ae17bd615a1ef7ed": {
+      "workers": {
+        "app/admin/competitions/page": {
+          "moduleId": 36929,
+          "async": true,
+          "exportedName": "getExportData",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/competitions/page": "action-browser"
+      },
+      "exportedName": "getExportData",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "60c83c90963b25520f7642fbdc902c1cf360ddb39d": {
+      "workers": {
+        "app/admin/competitions/page": {
+          "moduleId": 36929,
+          "async": true,
+          "exportedName": "toggleCompetitionArchive",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/competitions/page": "action-browser"
+      },
+      "exportedName": "toggleCompetitionArchive",
+      "filename": "src/app/actions/admin.ts"
+    }
+  },
+  "edge": {}
+}

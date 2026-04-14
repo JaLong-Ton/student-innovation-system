@@ -13,6 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea'
 import { createCompetition } from '@/app/actions/admin'
 import { toast } from 'sonner'
+
+export const dynamic = 'force-dynamic';
 import { ArrowLeft, Calendar, Users, Trophy } from 'lucide-react'
 import Link from 'next/link'
 
@@ -23,6 +25,9 @@ const formSchema = z.object({
     .max(100, '竞赛名称不能超过100个字符'),
   category: z.enum(['TECHNICAL', 'PROGRAMMING', 'AI', 'LANGUAGE', 'INNOVATION']).refine((val) => val !== undefined, {
     message: '请选择竞赛分类'
+  }),
+  level: z.enum(['校级', '市级', '省级', '国家级', '国际级']).refine((val) => val !== undefined, {
+    message: '请选择赛事级别'
   }),
   description: z.string()
     .max(1000, '赛事介绍不能超过1000个字符')
@@ -54,6 +59,7 @@ export default function CreateCompetitionPage() {
     defaultValues: {
       name: '',
       category: undefined,
+      level: undefined,
       description: '',
       deadline: '',
       maxParticipants: ''
@@ -84,6 +90,14 @@ export default function CreateCompetitionPage() {
     { value: 'AI', label: '人工智能' },
     { value: 'LANGUAGE', label: '语言类' },
     { value: 'INNOVATION', label: '创新类' }
+  ]
+
+  const levelOptions = [
+    { value: '校级', label: '校级' },
+    { value: '市级', label: '市级' },
+    { value: '省级', label: '省级' },
+    { value: '国家级', label: '国家级' },
+    { value: '国际级', label: '国际级' }
   ]
 
   return (
@@ -161,6 +175,35 @@ export default function CreateCompetitionPage() {
                     </Select>
                     <FormDescription>
                       选择合适的分类有助于学生快速找到感兴趣的竞赛
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* 赛事级别 */}
+              <FormField
+                control={form.control}
+                name="level"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>赛事级别 *</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isSubmitting}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="请选择赛事级别" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {levelOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      选择赛事的级别，将影响学生获得的成就等级
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

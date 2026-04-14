@@ -10,6 +10,8 @@ import { DeleteCompetitionButton } from '@/components/admin/delete-competition-b
 import { ExportCompetitionButton } from '@/components/admin/export-competition-button'
 import { ArchiveCompetitionButton } from '@/components/admin/archive-competition-button'
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminCompetitionsPage() {
   // 获取所有竞赛，按截止日期排序
   const competitions = await prisma.competition.findMany({

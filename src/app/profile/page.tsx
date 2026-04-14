@@ -2,15 +2,17 @@ import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { getAchievements } from '@/app/actions/achievements'
 import { AchievementFormClient } from '@/components/forms/achievement-form-client'
-import { AchievementList } from '@/components/profile/achievement-list'
 import { StatsCards } from '@/components/achievements/stats-cards'
 import { Toaster } from '@/components/ui/sonner'
 import { prisma } from '@/lib/prisma'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RegistrationList } from '@/components/profile/registration-list'
 import { getAvailableTeachers } from '@/app/actions/competitions'
 import PDFExportWrapper from '@/components/profile/pdf-export-wrapper'
 import { ResumeTemplate } from '@/components/profile/resume-template'
+import { CancelRegistrationButton } from '@/components/profile/cancel-registration-button'
+import { ProfileContentClient } from '@/components/profile/profile-content-client'
+
+export const dynamic = 'force-dynamic';
 
 export default async function ProfilePage() {
   const { userId } = await auth()
@@ -35,16 +37,17 @@ export default async function ProfilePage() {
     redirect('/sign-in')
   }
 
-  // 计算统计数据
+  // 计算统计数据 - 只统计已通过的成就
+  const approvedAchievements = achievements.filter(a => a.status === 'APPROVED')
   const stats = {
-    total: achievements.length,
-    awards: achievements.filter(a => a.type === 'AWARD').length,
-    papers: achievements.filter(a => a.type === 'PAPER').length,
-    patents: achievements.filter(a => a.type === 'PATENT').length
+    total: approvedAchievements.length,
+    awards: approvedAchievements.filter(a => a.type === 'AWARD').length,
+    papers: approvedAchievements.filter(a => a.type === 'PAPER').length,
+    patents: approvedAchievements.filter(a => a.type === 'PATENT').length
   }
 
-  // 格式化成就数据用于模板
-  const formattedAchievements = achievements.map(achievement => ({
+  // 格式化成就数据用于模板 - 只包含已通过的成就
+  const formattedAchievements = approvedAchievements.map(achievement => ({
     name: achievement.title,
     type: achievement.type,
     level: achievement.level,
@@ -105,22 +108,13 @@ export default async function ProfilePage() {
               <AchievementFormClient />
             </div>
 
-            {/* 右侧：Tabs内容区 */}
+            {/* 右侧：动画标签内容区 */}
             <div className="lg:col-span-2">
-              <Tabs defaultValue="achievements" className="w-full block space-y-6">
-                <TabsList className="inline-flex h-11 items-center justify-center rounded-lg bg-gray-100 p-1 mb-2">
-                  <TabsTrigger value="achievements" className="px-6">我的成就</TabsTrigger>
-                  <TabsTrigger value="registrations" className="px-6">赛事申请与状态</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="achievements" className="mt-0 w-full outline-none">
-                  <AchievementList achievements={achievements} />
-                </TabsContent>
-                
-                <TabsContent value="registrations" className="mt-0 w-full outline-none">
-                  <RegistrationList registrations={formattedRegistrations} teachers={teachers} />
-                </TabsContent>
-              </Tabs>
+              <ProfileContentClient 
+                achievements={achievements}
+                formattedRegistrations={formattedRegistrations}
+                teachers={teachers}
+              />
             </div>
           </div>
         </div>

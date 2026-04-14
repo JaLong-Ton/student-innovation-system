@@ -1,0 +1,245 @@
+{
+  "node": {
+    "0087a81602afbcb96fc0f42025cebfd57790de3ef8": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "layer": {
+        "app/profile/page": "action-browser"
+      },
+      "exportedName": "invalidateCacheAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+    },
+    "001055d42c5193b11b2439eb132b9d97cf69d83409": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/profile/page": "rsc"
+      },
+      "exportedName": "createOrReadKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "0090734cd218cf339ef6a6a5315b9104cd8d845cb5": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/profile/page": "action-browser"
+      },
+      "exportedName": "deleteKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "409b21d6685e86a98da5abbfacde52626bbd3fa15e": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/profile/page": "action-browser"
+      },
+      "exportedName": "syncKeylessConfigAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "0073ce3d2c6ccbd76b0f6cbfee099374fe25f6b53a": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "getUserAchievements",
+          "filename": "src/app/actions/achievements.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "rsc"
+      },
+      "exportedName": "getUserAchievements",
+      "filename": "src/app/actions/achievements.ts"
+    },
+    "00af3950a9d3b5f2d8c2edfa1e3e03d0dd8847a517": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "getAchievements",
+          "filename": "src/app/actions/achievements.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "rsc"
+      },
+      "exportedName": "getAchievements",
+      "filename": "src/app/actions/achievements.ts"
+    },
+    "402b989f4f0e56652fe95457295e703f528abe397a": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "createAchievement",
+          "filename": "src/app/actions/achievements.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "rsc"
+      },
+      "exportedName": "createAchievement",
+      "filename": "src/app/actions/achievements.ts"
+    },
+    "40a804fdfbd7a9a0d5cc0041bc64fd363fc6c75646": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "deleteAchievement",
+          "filename": "src/app/actions/achievements.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "rsc"
+      },
+      "exportedName": "deleteAchievement",
+      "filename": "src/app/actions/achievements.ts"
+    },
+    "40dd05ad1c2b27c1e121159f924e598f9351421fc7": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "createAchievementFromForm",
+          "filename": "src/app/actions/achievements.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "action-browser"
+      },
+      "exportedName": "createAchievementFromForm",
+      "filename": "src/app/actions/achievements.ts"
+    },
+    "60a405e5da679968993b4178d1c2a1e8b30087ca34": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "updateAchievement",
+          "filename": "src/app/actions/achievements.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "rsc"
+      },
+      "exportedName": "updateAchievement",
+      "filename": "src/app/actions/achievements.ts"
+    },
+    "00c379a1f3991bb360b87158acbd8afa8e055e710b": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "fixExpiredCompetitions",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "rsc"
+      },
+      "exportedName": "fixExpiredCompetitions",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "00d563de31b50659adb46e1ae86f87952c70db04e1": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "getAvailableTeachers",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "rsc"
+      },
+      "exportedName": "getAvailableTeachers",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "400709c5bdefb2b5c25af1ca5b1e8555824ae3374d": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "registerCompetition",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "rsc"
+      },
+      "exportedName": "registerCompetition",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "40766916b42ea154092e7f17977efbbc72a261e371": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "cancelRegistration",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "action-browser"
+      },
+      "exportedName": "cancelRegistration",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "40a4d03fa87e3f64d9c1f7704e3e5fb46a529c8348": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "getCompetitions",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "rsc"
+      },
+      "exportedName": "getCompetitions",
+      "filename": "src/app/actions/competitions.ts"
+    },
+    "603946bc6ad17b043f9ee8c98cdde4df2cb13f1e86": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": 65959,
+          "async": true,
+          "exportedName": "resubmitRegistration",
+          "filename": "src/app/actions/competitions.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "action-browser"
+      },
+      "exportedName": "resubmitRegistration",
+      "filename": "src/app/actions/competitions.ts"
+    }
+  },
+  "edge": {}
+}

@@ -1,0 +1,125 @@
+{
+  "node": {
+    "0087a81602afbcb96fc0f42025cebfd57790de3ef8": {
+      "workers": {
+        "app/admin/teachers/page": {
+          "moduleId": 4877,
+          "async": true,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/teachers/page": "action-browser"
+      },
+      "exportedName": "invalidateCacheAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+    },
+    "001055d42c5193b11b2439eb132b9d97cf69d83409": {
+      "workers": {
+        "app/admin/teachers/page": {
+          "moduleId": 4877,
+          "async": true,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/teachers/page": "rsc"
+      },
+      "exportedName": "createOrReadKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "0090734cd218cf339ef6a6a5315b9104cd8d845cb5": {
+      "workers": {
+        "app/admin/teachers/page": {
+          "moduleId": 4877,
+          "async": true,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/teachers/page": "action-browser"
+      },
+      "exportedName": "deleteKeylessAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "409b21d6685e86a98da5abbfacde52626bbd3fa15e": {
+      "workers": {
+        "app/admin/teachers/page": {
+          "moduleId": 4877,
+          "async": true,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/teachers/page": "action-browser"
+      },
+      "exportedName": "syncKeylessConfigAction",
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "0053e93f2aaba6d230f6cb82f50b4aebc98da7f5aa": {
+      "workers": {
+        "app/admin/teachers/page": {
+          "moduleId": 4877,
+          "async": true,
+          "exportedName": "getTeachers",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/teachers/page": "action-browser"
+      },
+      "exportedName": "getTeachers",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "40508ab452c2174daaf39a47a17a49bd376f31e48c": {
+      "workers": {
+        "app/admin/teachers/page": {
+          "moduleId": 4877,
+          "async": true,
+          "exportedName": "createTeacher",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/teachers/page": "action-browser"
+      },
+      "exportedName": "createTeacher",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "40b0d3be18768374da4f23126f595b956757bf5633": {
+      "workers": {
+        "app/admin/teachers/page": {
+          "moduleId": 4877,
+          "async": true,
+          "exportedName": "deleteTeacher",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/teachers/page": "action-browser"
+      },
+      "exportedName": "deleteTeacher",
+      "filename": "src/app/actions/admin.ts"
+    },
+    "402d18dc9045dd734953146ac16e35e8a7a6fd0039": {
+      "workers": {
+        "app/admin/teachers/page": {
+          "moduleId": 4877,
+          "async": true,
+          "exportedName": "batchImportTeachers",
+          "filename": "src/app/actions/admin.ts"
+        }
+      },
+      "layer": {
+        "app/admin/teachers/page": "action-browser"
+      },
+      "exportedName": "batchImportTeachers",
+      "filename": "src/app/actions/admin.ts"
+    }
+  },
+  "edge": {}
+}
