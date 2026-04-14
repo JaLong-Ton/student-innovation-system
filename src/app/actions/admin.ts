@@ -1020,7 +1020,7 @@ export async function getExportData(competitionId: string) {
     })
 
     // 扁平化格式化数据
-    const exportData = registrations.map(reg => ({
+    const exportData = registrations.map((reg: any) => ({
       申请人: reg.applicantName || '未知',
       作品名称: reg.projectName || '无',
       团队成员: reg.teamMembers || '无',
