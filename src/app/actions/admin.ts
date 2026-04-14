@@ -907,7 +907,7 @@ export async function batchReviewRegistrations(
     })
 
     // NOTE: 批量审批后同步所有涉及竞赛的 currentParticipants
-    const affectedCompetitionIds = [...new Set(registrationsToUpdate.map(r => r.competitionId))]
+    const affectedCompetitionIds = [...new Set(registrationsToUpdate.map((r: any) => r.competitionId))]
     for (const compId of affectedCompetitionIds) {
       const updatedCount = await prisma.registration.count({
         where: {
