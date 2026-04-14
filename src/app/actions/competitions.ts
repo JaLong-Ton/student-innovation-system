@@ -104,7 +104,7 @@ export async function getCompetitions(category?: string) {
     }
 
     // 为每个竞赛添加报名状态
-    const competitionsWithStatus = competitions.map(competition => ({
+    const competitionsWithStatus = competitions.map((competition: any) => ({
       ...competition,
       isRegistered: userRegistrations.includes(competition.id),
       isExpired: competition.deadline < new Date()
@@ -307,7 +307,7 @@ export async function getAvailableTeachers() {
     })
 
     // Convert null departments to undefined for frontend compatibility
-    return teachers.map(teacher => ({
+    return teachers.map((teacher: any) => ({
       ...teacher,
       department: teacher.department === null ? undefined : teacher.department
     }))
