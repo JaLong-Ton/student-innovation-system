@@ -350,7 +350,7 @@ export async function deleteCompetition(id: string) {
     }
 
     // 使用 Prisma 事务安全删除竞赛及其相关数据
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       // 第一步：删除所有相关的报名记录
       await tx.registration.deleteMany({
         where: { competitionId: id }
