@@ -50,7 +50,7 @@ export function TeacherImportButton() {
         return
       }
 
-      const formattedData = []
+      const formattedData: { name: string; department: string }[] = [];
       for (let i = 1; i < rawData.length; i++) {
         const row = rawData[i]
         if (!row || row.length === 0) continue
