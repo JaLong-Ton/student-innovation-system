@@ -85,7 +85,7 @@ export default async function AdminCompetitionsPage() {
           </TableHeader>
           <TableBody>
             {competitions.length > 0 ? (
-              competitions.map((competition) => (
+              competitions.map((competition: any) => (
                 <TableRow key={competition.id}>
                   <TableCell>
                     <div>
